@@ -301,3 +301,25 @@ func TestDrawInvalidDeck(t *testing.T) {
 
 	assert.Equal(t, 500, w.Code)
 }
+
+func TestDrawInvaliParameters(t *testing.T) {
+	var w = httptest.NewRecorder()
+	payload := map[string]string{
+		"deck_id": "1234",
+		"ammount": "1",
+	}
+
+	var buf bytes.Buffer
+	err := json.NewEncoder(&buf).Encode(payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	req, err := http.NewRequest("POST", "/draw", &buf)
+	router.ServeHTTP(w, req)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, 500, w.Code)
+}
